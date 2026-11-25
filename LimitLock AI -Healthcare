@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Limit Lock AI - Digital Healthcare</title>
+<style>
+*{box-sizing:border-box} body{margin:0;background:#0b1220;font-family:Arial;color:#fff}
+.box{max-width:440px;margin:auto;background:#0f172a;min-height:100vh;padding:16px;padding-bottom:95px}
+.header{background:linear-gradient(135deg,#059669,#0ea5e9);padding:18px;border-radius:20px}
+.header h1{margin:0;font-size:24px}.header p{margin:4px 0 0;font-size:13px;opacity:.9}
+.badge{display:inline-block;background:#fff;color:#000;padding:5px 10px;border-radius:20px;font-size:12px;font-weight:800;margin-top:10px}
+.card{background:#1e293b;border-radius:18px;padding:14px;margin-top:12px}
+.card h3{margin:0 0 8px;font-size:16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.mini{background:#1e293b;border-radius:16px;padding:12px}.mini b{font-size:22px}
+.label{font-size:12px;color:#94a3b8}
+.duties{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px}
+.duty{background:#1e293b;border:2px solid transparent;border-radius:14px;padding:10px;text-align:center;cursor:pointer}
+.duty.sel{border-color:#22c55e;background:#14532d}
+.btn{width:100%;background:#22c55e;color:#000;border:none;padding:14px;border-radius:14px;font-weight:900;font-size:16px;margin-top:12px;cursor:pointer}
+.btn2{width:100%;background:#334155;color:#fff;border:none;padding:12px;border-radius:12px;font-weight:700;margin-top:8px;cursor:pointer}
+.btnBlue{width:100%;background:#2563eb;color:#fff;border:none;padding:13px;border-radius:12px;font-weight:800;margin-top:10px;cursor:pointer}
+input,select{width:100%;padding:10px;border-radius:10px;border:1px solid #334155;background:#0f172a;color:#fff;margin-top:6px}
+.page{display:none}.page.show{display:block}
+.nav{position:fixed;bottom:0;left:0;right:0;max-width:440px;margin:auto;background:#1e293b;display:flex;justify-content:space-around;padding:8px}
+.nav button{background:transparent;color:#fff;border:none;padding:10px 6px;border-radius:10px;font-size:12px;font-weight:700}
+.nav button.on{background:#22c55e;color:#000}
+.timer{font-size:52px;font-weight:900;text-align:center;margin:8px 0}
+.barbg{background:#334155;height:10px;border-radius:20px;margin-top:8px}.barfill{background:#22c55e;height:10px;border-radius:20px;width:0%}
+.row{display:flex;justify-content:space-between;font-size:14px;padding:6px 0;border-bottom:1px solid #334155}
+.small{font-size:12px;color:#94a3b8}
+.pill{display:inline-block;padding:6px 10px;border-radius:20px;font-size:12px;font-weight:700;margin:4px 4px 0 0;border:none;cursor:pointer}
+</style></head>
+<body><div class="box">
+
+<!-- HEADER -->
+<div class="header">
+<h1>🩺 Limit Lock AI</h1>
+<p>Digital Healthcare • Screen Addiction Treatment & Prevention</p>
+<span class="badge">🔥 12-Day Healthy Streak</span>
+<span class="badge" style="background:#fde68a">⭐ Health Score: <span id="scoreTop">78</span>/100</span>
+</div>
+
+<!-- HOME -->
+<div id="p-home" class="page show">
+<div class="card" style="background:#4c1d95">
+<b>🤖 AI HEALTH ANALYSIS</b>
+<p id="aiText" style="font-size:14px;line-height:1.5">Based on your data: Screen time is high (4.2 hrs Reels). Eye strain risk is HIGH. Sleep quality is LOW. Recommended: Start Sleep Mode tonight.</p>
+<button onclick="fixHealth()" style="background:#fff;border:none;padding:8px 14px;border-radius:20px;font-weight:800;cursor:pointer">Get My Health Plan →</button>
+</div>
+
+<h3 style="margin-top:16px">Today Health Dashboard</h3>
+<div class="grid">
+<div class="mini"><span class="label">😴 SLEEP HOURS</span><br><b id="sleepVal" style="color:#22c55e">7.5 hrs</b><br><span class="small">Target: 8 hrs</span></div>
+<div class="mini"><span class="label">👁️ EYE STRAIN</span><br><b id="eyeVal" style="color:#facc15">Moderate</b><br><span class="small">Need 20-20-20 rest</span></div>
+<div class="mini"><span class="label">🤕 HEADACHE</span><br><b id="headVal" style="color:#fb923c">Mild</b><br><span class="small">1 day this week</span></div>
+<div class="mini"><span class="label">📱 SCREEN TIME</span><br><b>2h 10m</b><br><span class="small" style="color:#22c55e">▼ Down 62% vs last week</span></div>
+</div>
+
+<div class="card"><h3>🛡️ 1. Set Your Digital Limit</h3>
+<p class="small">Select a Duty / Treatment Mode to lock distracting apps for your health.</p>
+<div class="duties" id="duties"></div>
+<label>Select Apps to Block</label>
+<select id="apps"><option>Instagram + YouTube + Games</option><option>All Social Media</option><option>All Apps Except Calls</option></select>
+<label>Lock Duration: <b id="durLabel">2 Hours</b></label>
+<input id="durSlider" type="range" min="1" max="8" value="2">
+<button class="btn" onclick="startDuty()">🔒 START HEALTH LOCK</button>
+<p class="small" style="text-align:center">Emergency calls and 104 Health Helpline will still work.</p>
+</div>
+
+<div class="card"><h3>📈 Health Progress This Week</h3>
+<div class="row"><span>Mon</span><span>6h Screen 🔴 | 5h Sleep</span></div>
+<div class="row"><span>Tue</span><span>4.5h 🟡 | 6h Sleep</span></div>
+<div class="row"><span>Wed</span><span>3h 🟢 | 7h Sleep</span></div>
+<div class="row"><span>Thu</span><span>2.5h 🟢 | 7.5h Sleep</span></div>
+<div class="row"><span>Fri</span><span><b>2.1h 🟢 | 8h Sleep 🏆</b></span></div>
+</div>
+</div>
+
+<!-- LOCK -->
+<div id="p-lock" class="page">
+<div style="text-align:center"><div style="font-size:60px">🔒</div><h2 id="lockTitle">Study Mode Locked</h2><p class="small">Your apps are locked for your health recovery</p><div class="timer" id="timer">02:00:00</div><p class="small">Time Remaining</p></div>
+<div class="card"><p>Recovery Progress: <b id="progressText">0% Completed</b></p><div class="barbg"><div class="barfill" id="bar"></div></div><p id="tip">💡 Health Tip: 20-20-20 Rule</p><p id="motivation" style="color:#22c55e;font-weight:800">You are healing your eyes and brain.</p></div>
+<div class="card"><h3>Healthy Activity While Locked</h3><button class="pill" style="background:#14532d;color:#fff" onclick="alert('✅ Eye Exercise Completed! +10 Health Points')">👁️ Do Eye Exercise</button><button class="pill" style="background:#1e40af;color:#fff" onclick="alert('✅ Breathing Exercise Done! Stress Reduced')">🧘 Breathing Exercise</button><button class="pill" style="background:#0f766e;color:#fff" onclick="alert('✅ Water Logged! Hydration improves headache')">💧 Log Water</button></div>
+<button class="btn2" onclick="showPage('home')">Unlock for Demo Only</button>
+<button class="btn2" style="background:#dc2626" onclick="alert('Calling Emergency: 104 Health Helpline...')">🚨 Emergency - Call 104</button>
+</div>
+
+<!-- UPDATE HEALTH -->
+<div id="p-health" class="page">
+<div class="card"><h3>🩺 2. Update Your Health Daily</h3><p class="small">Fill this daily. Your Health Score and Doctor Report will update automatically.</p>
+<label>How many hours did you sleep last night?</label>
+<input id="inSleep" type="number" placeholder="e.g. 7.5" value="7.5">
+<label>Eye Pain / Strain Level</label>
+<select id="inEye"><option>None</option><option selected>Mild</option><option>Moderate</option><option>Severe</option></select>
+<label>Headache Today?</label>
+<select id="inHead"><option>None</option><option selected>Mild</option><option>Moderate</option><option>Severe</option></select>
+<label>Stress / Anxiety Level (1-10)</label>
+<input id="inStress" type="number" min="1" max="10" value="3">
+<label>Screen Time Today (Hours)</label>
+<input id="inScreen" type="number" value="2.1" step="0.1">
+<button class="btn" onclick="updateHealth()">✅ UPDATE MY HEALTH</button>
+<p id="healthResult" style="font-weight:700;color:#22c55e;margin-top:10px"></p>
+</div>
+
+<div class="card"><h3>💧 Daily Health Habits</h3><p>Water: <b><span id="water">4/8</span> glasses</b> <button onclick="addWater()" style="background:#2563eb;color:#fff;border:none;padding:6px 12px;border-radius:20px;font-weight:700">+1 Glass</button></p><p>Mood Today:</p><button class="pill" style="background:#14532d;color:#fff" onclick="mood('Happy')">😊 Good</button><button class="pill" style="background:#854d0e;color:#fff" onclick="mood('Stressed')">😰 Stressed</button><button class="pill" style="background:#334155;color:#fff" onclick="mood('Tired')">😴 Tired</button><p id="moodReply" style="color:#22c55e;font-weight:700"></p></div>
+
+<div class="card" style="background:#7f1d1d"><h3>🚨 Mental Health Support</h3><p class="small">Feeling anxious, low, or addicted? Talk to a certified counsellor. Free & Confidential.</p><button class="btn2" style="background:#fff;color:#000" onclick="alert('Connecting to Counsellor... You are not alone.')">💬 Chat with Counsellor</button><button class="btn2" style="background:#fff;color:#000" onclick="alert('Calling 104 - Tamil Nadu Health Helpline')">📞 Call 104 Helpline</button></div>
+</div>
+
+<!-- REPORT / DOCTOR -->
+<div id="p-report" class="page">
+<div class="card"><h3>📋 Doctor Health Report</h3><p class="small">Patient ID: LL-2026-1042 • Generated: Today</p>
+<div class="row"><span>Health Score</span><b id="scoreReport" style="color:#22c55e">78 / 100</b></div>
+<div class="row"><span>Screen Time</span><b>6h → 2.1h (-65%)</b></div>
+<div class="row"><span>Sleep</span><b id="sleepReport">7.5 hrs (+2.5 hrs)</b></div>
+<div class="row"><span>Eye Strain</span><b id="eyeReport">Moderate → Mild</b></div>
+<div class="row"><span>Headache Days</span><b>4 days → 1 day</b></div>
+<div class="row"><span>Stress Level</span><b id="stressReport">3 / 10 (Low)</b></div>
+<p style="background:#14532d;padding:10px;border-radius:12px;font-size:14px"><b>🩺 Dr. Priya, Apollo Chennai:</b><br><span id="doctorNote">"Patient showing excellent improvement. Digital detox is working. Eye strain reduced. Continue Sleep Mode for 7 more days."</span></p>
+<button class="btnBlue" onclick="alert('✅ Report shared with Doctor & Parents on WhatsApp!')">📤 Share Report with Doctor</button>
+<button class="btn2" onclick="alert('✅ Appointment Booked: Tomorrow 10 AM - Apollo Chennai')">📅 Book Doctor Appointment</button>
+</div>
+<div class="card"><h3>👨‍👩‍👦 Parent View</h3><p class="small">Your child's health is improving. Screen time reduced, sleep improved, headache reduced. No Reels watched today.</p><p>✅ Duties Completed: <b>4 / 6</b><br>✅ Focus Time: <b>6.5 Hours</b><br>✅ Reels: <b>0 Hours</b></p></div>
+</div>
+
+</div>
+<div class="nav">
+<button data-p="home" class="on" onclick="showPage('home')">🏠 Home</button>
+<button data-p="lock" onclick="showPage('lock')">🔒 Lock</button>
+<button data-p="health" onclick="showPage('health')">🩺 Update Health</button>
+<button data-p="report" onclick="showPage('report')">📋 Report</button>
+</div>
+<script>
+var duties=[
+{n:"Study Therapy",e:"📚",m:"Your focus is healing your brain. You can do it.",t:"Health Tip: Every 20 mins, look 20 feet away for 20 seconds."},
+{n:"Sleep Therapy",e:"🌙",m:"Good sleep is the best medicine. Sleep well.",t:"Health Tip: No blue light 1 hour before sleep improves sleep by 40%."},
+{n:"Eye Recovery",e:"👁️",m:"Give your eyes rest. They need to heal.",t:"Health Tip: Blink 20 times and close eyes for 1 minute."},
+{n:"Work Focus",e:"💻",m:"Focus reduces stress. One task at a time.",t:"Health Tip: Drink water every 30 mins to reduce headache."},
+{n:"Family Therapy",e:"👨‍👩‍👦",m:"Family time reduces anxiety and stress.",t:"Health Tip: Talking with family reduces cortisol (stress hormone)."},
+{n:"Digital Detox",e:"🧘",m:"Calm your mind. Digital detox is healing you.",t:"Health Tip: Deep breathing for 2 mins reduces heart rate."}
+];
+var sel=0, sec=7200, tot=7200, timer=null, water=4;
+function build(){var b=document.getElementById("duties");b.innerHTML="";for(var i=0;i<duties.length;i++){var d=duties[i];var div=document.createElement("div");div.className="duty"+(i===sel?" sel":"");div.innerHTML="<div style='font-size:24px'>"+d.e+"</div><b style='font-size:13px'>"+d.n+"</b>";(function(idx){div.onclick=function(){sel=idx;build();}})(i);b.appendChild(div);}}
+function showPage(p){var all=document.querySelectorAll(".page");for(var i=0;i<all.length;i++)all[i].classList.remove("show");document.getElementById("p-"+p).classList.add("show");var btns=document.querySelectorAll(".nav button");for(var j=0;j<btns.length;j++){if(btns[j].getAttribute("data-p")===p)btns[j].classList.add("on");else btns[j].classList.remove("on");}window.scrollTo(0,0);}
+function startDuty(){var d=duties[sel];document.getElementById("lockTitle").innerText=d.n+" - Locked";document.getElementById("motivation").innerText=d.m;document.getElementById("tip").innerText="💡 "+d.t;var h=parseInt(document.getElementById("durSlider").value);tot=h*3600;sec=tot;showPage("lock");if(timer)clearInterval(timer);updateTimer();timer=setInterval(function(){sec--;if(sec<0){clearInterval(timer);alert("🎉 Treatment Completed! Great job! Health Score +10");return;}updateTimer();},1000);}
+function updateTimer(){var h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60),s=sec%60;document.getElementById("timer").innerText=(h<10?"0"+h:h)+":"+(m<10?"0"+m:m)+":"+(s<10?"0"+s:s);var pct=Math.round((1-sec/tot)*100);document.getElementById("progressText").innerText=pct+"% Completed";document.getElementById("bar").style.width=pct+"%";}
+function fixHealth(){document.getElementById("aiText").innerText="Great progress! Your Health Score improved from 52 to 78. Sleep improved by 2.5 hours. Continue Sleep Therapy for best recovery.";alert("Your Personal Health Plan is ready: 1) Sleep Mode 10:30 PM 2) Eye Exercise every 30 mins 3) No Reels after 9 PM");}
+function addWater(){water++;if(water>8)water=8;document.getElementById("water").innerText=water+"/8";alert("Great! Hydration logged 💧 Total: "+water+"/8");}
+function mood(x){var e=document.getElementById("moodReply");if(x==="Happy")e.innerText="Great! Keep maintaining healthy habits 😊";if(x==="Stressed")e.innerText="Take a deep breath. Try Breathing Exercise. Talk to counsellor if needed 🫂";if(x==="Tired")e.innerText="Your body needs rest. Start Sleep Therapy 😴";}
+function updateHealth(){
+var sleep=parseFloat(document.getElementById("inSleep").value)||7.5;
+var eye=document.getElementById("inEye").value;
+var head=document.getElementById("inHead").value;
+var stress=parseInt(document.getElementById("inStress").value)||3;
+var screen=parseFloat(document.getElementById("inScreen").value)||2.1;
+document.getElementById("sleepVal").innerText=sleep+" hrs";
+document.getElementById("eyeVal").innerText=eye;
+document.getElementById("headVal").innerText=head;
+var score=Math.round(50 + (sleep*4) - (stress*2) - (screen*2));
+if(score>100)score=100; if(score<20)score=20;
+document.getElementById("scoreTop").innerText=score;
+document.getElementById("scoreReport").innerText=score+" / 100";
+document.getElementById("sleepReport").innerText=sleep+" hrs";
+document.getElementById("eyeReport").innerText=eye;
+document.getElementById("stressReport").innerText=stress+" / 10";
+var note="";
+if(score>=80) note="Excellent recovery! Patient is almost cured. Continue healthy habits.";
+else if(score>=65) note="Good improvement. Continue Sleep Mode and Digital Detox for 7 more days.";
+else note="Needs attention. Recommend Counsellor consultation and strict Sleep Therapy.";
+document.getElementById("doctorNote").innerText='"'+note+'"';
+document.getElementById("healthResult").innerText="✅ Health Updated! New Health Score: "+score+"/100. Report Updated.";
+document.getElementById("aiText").innerText="Updated: Sleep "+sleep+" hrs, Eye Pain: "+eye+", Headache: "+head+", Stress: "+stress+"/10. Your Health Score is now "+score+". "+note;
+alert("✅ Health Updated Successfully! Score: "+score+"/100");
+showPage("report");
+}
+document.getElementById("durSlider").oninput=function(){document.getElementById("durLabel").innerText=this.value+" Hours";};
+build();
+</script>
+</body></html>
